@@ -91,16 +91,22 @@ def save_metadata(metadata: dict) -> None:
     METADATA_FILE.write_text(json.dumps(metadata, indent=2))
 
 
+def post_path(topic_id: int | str) -> Path:
+    """Return the path for a topic's post file, bucketed into subdirectories."""
+    bucket = int(topic_id) // 10000
+    return POSTS_DIR / str(bucket) / f"{topic_id}.json"
+
+
 def load_topic_posts(topic_id: int | str) -> dict:
-    path = POSTS_DIR / f"{topic_id}.json"
+    path = post_path(topic_id)
     if path.exists():
         return json.loads(path.read_text())
     return {"posts": {}}
 
 
 def save_topic_posts(topic_id: int | str, data: dict) -> None:
-    POSTS_DIR.mkdir(parents=True, exist_ok=True)
-    path = POSTS_DIR / f"{topic_id}.json"
+    path = post_path(topic_id)
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2))
 
 
@@ -298,9 +304,9 @@ def show_stats() -> None:
     topics = metadata.get("topics", {})
     last_run = metadata.get("last_run", "never")
     total_posts = sum(
-        len(json.loads((POSTS_DIR / f"{tid}.json").read_text()).get("posts", {}))
+        len(json.loads(post_path(tid).read_text()).get("posts", {}))
         for tid in topics
-        if (POSTS_DIR / f"{tid}.json").exists()
+        if post_path(tid).exists()
     )
     print(f"Last run   : {last_run}")
     print(f"Topics     : {len(topics)}")

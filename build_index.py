@@ -47,7 +47,7 @@ def tokenize(text: str) -> list[str]:
 
 
 def build_index() -> None:
-    files = sorted(POSTS_DIR.glob("*.json"))
+    files = sorted(POSTS_DIR.glob("**/*.json"))
     if not files:
         print(f"No post files found in {POSTS_DIR}")
         sys.exit(1)
