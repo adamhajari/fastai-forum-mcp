@@ -5,20 +5,29 @@ Incrementally crawls [forums.fast.ai](https://forums.fast.ai) using the Discours
 ## Usage
 
 ```bash
-pip install -r requirements.txt
+git clone https://github.com/adamhajari/fastai-forum-mcp
+cd fastai-forum-mcp
+uv sync
 
 # 1. Crawl the forum
 #    First run downloads pre-crawled history from Hugging Face, then fetches
 #    any new posts since that snapshot. Subsequent runs are incremental (~minutes).
-python forum_crawler.py
-python forum_crawler.py --stats  # show stats without crawling
+uv run python forum_crawler.py
+uv run python forum_crawler.py --stats  # show stats without crawling
 
 # 2. Build the search index (run once after crawling, ~few minutes)
-python build_index.py
-
-# 3. The MCP server starts automatically via .mcp.json when Claude Code loads
-#    Restart Claude Code after building the index for the first time.
+uv run python build_index.py
 ```
+
+### Registering the MCP server with Claude Code
+
+The repo includes a `.mcp.json` that works if you run Claude Code from within the `fastai-forum-mcp` directory. If you run Claude Code from a different directory (more common), add the server to your global Claude config instead:
+
+```bash
+claude mcp add fastai-forum -- uv --directory /path/to/fastai-forum-mcp run python mcp_server.py
+```
+
+Replace `/path/to/fastai-forum-mcp` with the absolute path where you cloned this repo. Then restart Claude Code.
 
 The first run downloads pre-crawled data from [Hugging Face](https://huggingface.co/datasets/adamhajari/fastai-forum), then fetches any posts newer than that snapshot. Subsequent runs only fetch topics that have had new activity since the last run.
 
@@ -30,7 +39,8 @@ fastai-forum-mcp/
 ├── forum_crawler.py       # the crawler
 ├── build_index.py         # builds the BM25 search index from crawled posts
 ├── mcp_server.py          # MCP server — exposes search_forum tool to Claude
-├── requirements.txt
+├── pyproject.toml
+├── uv.lock
 └── data/                  # created after running the crawler (gitignored)
     ├── metadata.json      # index of all known topics
     ├── search_index.pkl   # BM25 index (built by build_index.py)
