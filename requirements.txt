@@ -1,6 +1,0 @@
-requests
-rank-bm25
-mcp[cli]
-sentence-transformers
-faiss-cpu
-huggingface_hub

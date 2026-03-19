@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "fastai-forum": {
-      "command": "python3",
-      "args": ["mcp_server.py"]
+      "command": "uv",
+      "args": ["run", "python", "mcp_server.py"]
     }
   }
 }
