@@ -48,14 +48,7 @@ uv run python build_index.py
 uv run python build_embeddings.py
 
 # 3. Upload to Hugging Face (requires write access to adamhajari/fastai-forum)
-tar czf data/posts.tar.gz -C data posts/
-python3 -c "
-from huggingface_hub import HfApi
-api = HfApi()
-api.upload_file(path_or_fileobj='data/posts.tar.gz', path_in_repo='posts.tar.gz', repo_id='adamhajari/fastai-forum', repo_type='dataset')
-api.upload_file(path_or_fileobj='data/metadata.json', path_in_repo='metadata.json', repo_id='adamhajari/fastai-forum', repo_type='dataset')
-"
-rm data/posts.tar.gz
+uv run python upload_to_hub.py
 ```
 
 The compressed archive is ~52MB (vs 237MB uncompressed), making uploads and downloads much faster.
@@ -69,6 +62,7 @@ fastai-forum-mcp/
 ├── build_index.py         # builds the BM25 search index from crawled posts
 ├── build_embeddings.py    # builds the FAISS semantic vector index from crawled posts
 ├── mcp_server.py          # MCP server — exposes search_forum tool to Claude
+├── upload_to_hub.py       # compresses posts/ and uploads to Hugging Face
 ├── pyproject.toml
 ├── uv.lock
 └── data/                  # created after running the crawler (gitignored)
