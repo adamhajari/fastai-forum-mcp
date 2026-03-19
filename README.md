@@ -3,20 +3,24 @@
 Incrementally crawls [forums.fast.ai](https://forums.fast.ai) using the Discourse public JSON API and persists all topics and posts to disk.
 
 ## Usage
+1. Crawl the forum. First run downloads pre-crawled history from Hugging Face, then fetches any new posts since that snapshot. Subsequent runs are incremental (~minutes).
+2. Build the search index (run once after crawling, ~few minutes)
+3. Build the semantic vector index (run once after crawling, ~few minutes)
 
 ```bash
 git clone https://github.com/adamhajari/fastai-forum-mcp
 cd fastai-forum-mcp
 uv sync
 
-# 1. Crawl the forum
-#    First run downloads pre-crawled history from Hugging Face, then fetches
-#    any new posts since that snapshot. Subsequent runs are incremental (~minutes).
+# fetch history and crawl forum for new posts
 uv run python forum_crawler.py
 uv run python forum_crawler.py --stats  # show stats without crawling
 
-# 2. Build the search index (run once after crawling, ~few minutes)
+# build BM25 search index
 uv run python build_index.py
+
+# build FAISS semantic vector index
+uv run python build_embeddings.py
 ```
 
 ### Registering the MCP server with Claude Code
@@ -31,6 +35,31 @@ Replace `/path/to/fastai-forum-mcp` with the absolute path where you cloned this
 
 The first run downloads pre-crawled data from [Hugging Face](https://huggingface.co/datasets/adamhajari/fastai-forum), then fetches any posts newer than that snapshot. Subsequent runs only fetch topics that have had new activity since the last run.
 
+## Updating the Hugging Face dataset
+
+After re-crawling, push the updated data to [huggingface.co/datasets/adamhajari/fastai-forum](https://huggingface.co/datasets/adamhajari/fastai-forum) so others can benefit from the latest posts:
+
+```bash
+# 1. Crawl new posts
+uv run python forum_crawler.py
+
+# 2. Rebuild indexes
+uv run python build_index.py
+uv run python build_embeddings.py
+
+# 3. Upload to Hugging Face (requires write access to adamhajari/fastai-forum)
+python3 -c "
+from huggingface_hub import HfApi
+HfApi().upload_large_folder(
+    folder_path='data',
+    repo_id='adamhajari/fastai-forum',
+    repo_type='dataset',
+)
+"
+```
+
+Note: `upload_large_folder` is required — the dataset is too large for `upload_folder` and will hit a timeout. The upload is resumable if interrupted.
+
 ## File Structure
 
 ```
@@ -38,6 +67,7 @@ fastai-forum-mcp/
 ├── .mcp.json              # tells Claude Code how to start the MCP server
 ├── forum_crawler.py       # the crawler
 ├── build_index.py         # builds the BM25 search index from crawled posts
+├── build_embeddings.py    # builds the FAISS semantic vector index from crawled posts
 ├── mcp_server.py          # MCP server — exposes search_forum tool to Claude
 ├── pyproject.toml
 ├── uv.lock
