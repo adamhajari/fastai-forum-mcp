@@ -6,6 +6,6 @@ To update it after re-crawling, use `upload_large_folder` (not `upload_folder`) 
 is too large for a single commit and will hit HF's 504 timeout otherwise.
 
 ## Post file layout
-Posts are stored in `data/posts/{topic_id // 10000}/{topic_id}.json` — bucketed into
-subdirectories to stay under Hugging Face's 10,000 files-per-directory limit. Any code
-that reads post files must use `**/*.json` glob patterns, not `*.json`.
+Posts are stored flat in `data/posts/{topic_id}.json`. On Hugging Face they are stored
+as a single compressed archive `posts.tar.gz` (~52MB) to avoid the 10k files/dir limit
+and keep downloads small. The download step extracts the archive automatically.

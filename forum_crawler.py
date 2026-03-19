@@ -5,8 +5,8 @@ Crawler for forums.fast.ai (Discourse-based forum).
 Uses the Discourse public JSON API to incrementally fetch topics and posts.
 
 Storage layout:
-  data/metadata.json         - index of all topics with timestamps
-  data/posts/{topic_id}.json - all posts for each topic
+  data/metadata.json          - index of all topics with timestamps
+  data/posts/{topic_id}.json  - all posts for each topic
 
 Usage:
   python forum_crawler.py            # run crawler
@@ -14,6 +14,7 @@ Usage:
 """
 
 import json
+import tarfile
 import time
 import sys
 import argparse
@@ -27,7 +28,7 @@ except ImportError:
     sys.exit(1)
 
 try:
-    from huggingface_hub import snapshot_download
+    from huggingface_hub import hf_hub_download
     HF_AVAILABLE = True
 except ImportError:
     HF_AVAILABLE = False
@@ -91,23 +92,16 @@ def save_metadata(metadata: dict) -> None:
     METADATA_FILE.write_text(json.dumps(metadata, indent=2))
 
 
-def post_path(topic_id: int | str) -> Path:
-    """Return the path for a topic's post file, bucketed into subdirectories."""
-    bucket = int(topic_id) // 10000
-    return POSTS_DIR / str(bucket) / f"{topic_id}.json"
-
-
 def load_topic_posts(topic_id: int | str) -> dict:
-    path = post_path(topic_id)
+    path = POSTS_DIR / f"{topic_id}.json"
     if path.exists():
         return json.loads(path.read_text())
     return {"posts": {}}
 
 
 def save_topic_posts(topic_id: int | str, data: dict) -> None:
-    path = post_path(topic_id)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, indent=2))
+    POSTS_DIR.mkdir(parents=True, exist_ok=True)
+    (POSTS_DIR / f"{topic_id}.json").write_text(json.dumps(data, indent=2))
 
 
 # ---------------------------------------------------------------------------
@@ -237,12 +231,19 @@ def download_from_hub() -> None:
         print("  scratch instead. WARNING: this will take up to 24 hours to complete.")
         sys.exit(1)
     print(f"Downloading pre-crawled data from {HF_REPO} …")
-    snapshot_download(
-        repo_id=HF_REPO,
-        repo_type="dataset",
-        local_dir=str(DATA_DIR),
-        ignore_patterns=["*.pkl", "*.faiss"],
-    )
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    for filename in ("metadata.json", "posts.tar.gz"):
+        hf_hub_download(
+            repo_id=HF_REPO,
+            repo_type="dataset",
+            filename=filename,
+            local_dir=str(DATA_DIR),
+        )
+    archive = DATA_DIR / "posts.tar.gz"
+    print("Extracting posts …")
+    with tarfile.open(archive, "r:gz") as tar:
+        tar.extractall(DATA_DIR)
+    archive.unlink()
     print("Download complete.")
 
 
@@ -305,9 +306,9 @@ def show_stats() -> None:
     topics = metadata.get("topics", {})
     last_run = metadata.get("last_run", "never")
     total_posts = sum(
-        len(json.loads(post_path(tid).read_text()).get("posts", {}))
+        len(json.loads((POSTS_DIR / f"{tid}.json").read_text()).get("posts", {}))
         for tid in topics
-        if post_path(tid).exists()
+        if (POSTS_DIR / f"{tid}.json").exists()
     )
     print(f"Last run   : {last_run}")
     print(f"Topics     : {len(topics)}")
