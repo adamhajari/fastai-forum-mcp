@@ -241,6 +241,7 @@ def download_from_hub() -> None:
         repo_id=HF_REPO,
         repo_type="dataset",
         local_dir=str(DATA_DIR),
+        ignore_patterns=["*.pkl", "*.faiss"],
     )
     print("Download complete.")
 

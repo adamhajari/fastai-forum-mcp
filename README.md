@@ -48,17 +48,20 @@ uv run python build_index.py
 uv run python build_embeddings.py
 
 # 3. Upload to Hugging Face (requires write access to adamhajari/fastai-forum)
+#    Only posts and metadata are uploaded — indexes are excluded since users
+#    rebuild them locally (saves ~570MB of upload/download).
 python3 -c "
 from huggingface_hub import HfApi
 HfApi().upload_large_folder(
     folder_path='data',
     repo_id='adamhajari/fastai-forum',
     repo_type='dataset',
+    allow_patterns=['posts/**', 'metadata.json'],
 )
 "
 ```
 
-Note: `upload_large_folder` is required — the dataset is too large for `upload_folder` and will hit a timeout. The upload is resumable if interrupted.
+Note: `upload_large_folder` is required — the posts directory is too large for `upload_folder` and will hit a timeout. The upload is resumable if interrupted.
 
 ## File Structure
 
