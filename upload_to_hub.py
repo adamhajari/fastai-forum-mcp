@@ -36,9 +36,11 @@ def main() -> None:
         print(f"ERROR: metadata.json not found at {METADATA_FILE}")
         sys.exit(1)
 
-    print(f"Compressing {POSTS_DIR} → {ARCHIVE} …")
+    post_files = sorted(f for f in POSTS_DIR.glob("*.json") if not f.name.startswith("._"))
+    print(f"Compressing {len(post_files)} post files → {ARCHIVE} …")
     with tarfile.open(ARCHIVE, "w:gz") as tar:
-        tar.add(POSTS_DIR, arcname="posts")
+        for f in post_files:
+            tar.add(f, arcname=f"posts/{f.name}")
     size_mb = ARCHIVE.stat().st_size / 1e6
     print(f"Archive size: {size_mb:.0f} MB")
 
