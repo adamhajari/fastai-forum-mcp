@@ -139,6 +139,65 @@ highlighted terms — useful for showing why a result was returned.
 
 ---
 
+## Embedding quality improvements (not yet implemented)
+
+The current `build_embeddings.py` has two issues that likely degrade search quality:
+
+### Problem 1: character-based truncation wastes model capacity
+
+Posts are truncated to 512 characters before embedding:
+
+```python
+text = post.get('text', '')[:512]
+```
+
+`all-MiniLM-L6-v2` has a 256-token limit. Average English text is ~4 chars/token, so
+512 chars ≈ 128 tokens — roughly half the model's capacity is wasted. The truncation
+should be token-aware (using the model's own tokenizer) to use the full 256 tokens.
+
+### Problem 2: title is not included in the embedding
+
+The post body alone may not reflect what the thread is about. Prepending the topic title
+gives the model essential context, especially for short or ambiguous posts.
+
+### Proposed fix: title-prefixed, token-aware truncation
+
+```python
+# Use the model's tokenizer to fill the full context window
+text = f"{post['topic_title']}\n\n{post['text']}"
+# sentence-transformers truncates to the model's max_seq_length automatically
+# when you pass truncate=True (the default), so no manual slicing needed
+```
+
+This is a low-effort, high-impact change: no architecture changes, no new dependencies,
+no index format changes. Requires a full rebuild of `index.faiss` and `posts.pkl`.
+
+To implement this, ask: **"fix the embedding truncation to be token-aware and include the topic title"**.
+
+### Alternative: switch to a longer-context embedding model
+
+If post bodies are long and contain important information beyond the first 256 tokens,
+a model with a larger context window would help more than better truncation:
+
+| Model | Dimensions | Max tokens | Notes |
+|---|---|---|---|
+| `all-MiniLM-L6-v2` (current) | 384 | 256 | General similarity, not QA-tuned |
+| `multi-qa-MiniLM-L6-cos-v1` | 384 | 512 | Same size, trained on QA pairs |
+| `flax-sentence-embeddings/stackoverflow_mpnet-base` | 768 | 512 | StackOverflow domain, larger index |
+| `nomic-embed-text` | 768 | 8192 | Long context, can embed entire posts |
+
+Switching models requires rebuilding the FAISS index (dimensions may change) and
+updating the model name in both `build_embeddings.py` and `mcp_server.py`.
+
+### Alternative: chunk + store separately
+
+Instead of embedding one vector per post, split each post into overlapping chunks and
+store each chunk as its own FAISS entry. Search returns the most relevant chunk;
+deduplication groups multiple chunks from the same post. Better recall for long posts,
+but increases index size proportionally to average post length.
+
+---
+
 ## Alternative approach: incremental FAISS embeddings (not yet implemented)
 
 The current `build_embeddings.py` uses `IndexFlatIP` which requires a full

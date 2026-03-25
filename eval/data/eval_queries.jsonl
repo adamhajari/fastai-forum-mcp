@@ -1,0 +1,200 @@
+{"query": "why does data augmentation decrease accuracy in image classification", "post_id": "139862", "topic_id": "37853", "topic_title": "Scene Classification in Images"}
+{"query": "python decorator breaks documentation generation", "post_id": "216043", "topic_id": "61790", "topic_title": "Documentation breaks when I use a python decorator"}
+{"query": "docker for data scientists tutorial", "post_id": "37704", "topic_id": "8993", "topic_title": "Blog Post on Getting Started With Docker Containers For Data Scientists"}
+{"query": "how to deploy python trained deep learning models to c++ production", "post_id": "28723", "topic_id": "7841", "topic_title": "Production Case Scenario: C++ inference from Python-trained models"}
+{"query": "Swift for TensorFlow accuracy calculation timing in training loop", "post_id": "164306", "topic_id": "44220", "topic_title": "Swift for TensorFlow Online Walkthrough"}
+{"query": "how to lock train validation test split fastai consistent across retraining", "post_id": "199454", "topic_id": "56007", "topic_title": "Locking data to test and validation set!"}
+{"query": "how to handle jupyter notebook merge conflicts git", "post_id": "60850", "topic_id": "14785", "topic_title": "Jupyter Notebook Diffs"}
+{"query": "k-means clustering on MNIST images unsupervised learning", "post_id": "865", "topic_id": "217", "topic_title": "Unsupervised learning"}
+{"query": "search_images_ddg timeout error google colab", "post_id": "368052", "topic_id": "121311", "topic_title": "Getting an error when trying to run search_images_ddg in google colab"}
+{"query": "how to load exported fastai model with custom metric in different environment", "post_id": "175336", "topic_id": "47632", "topic_title": "Can't get attribute 'acc_camvid' - lesson 3"}
+{"query": "why are negative values becoming zero when extracting features from resnet50 with hooks", "post_id": "266451", "topic_id": "74923", "topic_title": "Image similarity"}
+{"query": "how to handle missing words in pretrained word embeddings", "post_id": "36563", "topic_id": "8787", "topic_title": "Loading pretrained embeddings with some missing text"}
+{"query": "how to set up fastai with kubeflow", "post_id": "156950", "topic_id": "42466", "topic_title": "Kubeflow fastai library Setup"}
+{"query": "how to load pretrained model file in cnn_learner fast.ai", "post_id": "210689", "topic_id": "60021", "topic_title": "Lesson 1 cnn_learner set file path"}
+{"query": "fast.ai APL study session 16 discussion", "post_id": "326019", "topic_id": "98202", "topic_title": "Fast.ai APL study session 16"}
+{"query": "fastai tabular GPU memory usage not affected by batch size", "post_id": "225522", "topic_id": "64007", "topic_title": "Fastai v1 tabular GPU memory independent of batch size?"}
+{"query": "jupyter notebook kernel dies when fitting random forest model", "post_id": "24280", "topic_id": "7339", "topic_title": "Jupyter Notebook Kernal Dies"}
+{"query": "how to continue training after 1cycle policy", "post_id": "127735", "topic_id": "33341", "topic_title": "Best practice for further training after running a 1cycle policy?"}
+{"query": "regex not matching Windows file paths fast.ai lesson 1", "post_id": "146474", "topic_id": "39878", "topic_title": "Lesson 1: Regular expression fails to match Windows paths"}
+{"query": "how to pad images of different sizes evenly", "post_id": "330358", "topic_id": "100332", "topic_title": "Padding images"}
+{"query": "how to build deep learning box nvidia jetson nano fast.ai", "post_id": "160249", "topic_id": "43242", "topic_title": "Build a Deep Learning Box that runs fast.ai for $99 ish"}
+{"query": "how to view images from confusion matrix square fastai", "post_id": "176699", "topic_id": "48082", "topic_title": "How to see images from one square of confusion matrix"}
+{"query": "finetuning resnet50 with smaller images than 224x224", "post_id": "307109", "topic_id": "90833", "topic_title": "Finetuning using input image whose size is smaller than images used to pretrain ResNet50"}
+{"query": "fastai label_from_func unhashable type list error bounding box", "post_id": "195031", "topic_id": "54616", "topic_title": "Unhashable type 'list' in .label_from_func()"}
+{"query": "how to clear tensorflow gpu memory without restarting kernel", "post_id": "7478", "topic_id": "1979", "topic_title": "Tip: Clear tensorflow GPU memory"}
+{"query": "why is my lr_find plot bumpy and jagged", "post_id": "69838", "topic_id": "17116", "topic_title": "IMDB lr_find() yields bumpy plot"}
+{"query": "pandas rolling window function groupby explanation", "post_id": "32207", "topic_id": "8262", "topic_title": "Rossmann - window functions to calculate rolling quantities"}
+{"query": "textblock is not defined fastai", "post_id": "287632", "topic_id": "82783", "topic_title": "NameError: name 'TextBlock' is not defined"}
+{"query": "is DataRobot replacing machine learning engineers", "post_id": "75723", "topic_id": "18974", "topic_title": "Thoughts on DataRobot"}
+{"query": "how to scale up GAN resolution while keeping trained weights", "post_id": "269226", "topic_id": "75791", "topic_title": "Increasing GAN size, lesson 7"}
+{"query": "fastai fastcore version incompatibility error colab", "post_id": "283901", "topic_id": "81254", "topic_title": "Colab Lesson 5 Error: \"fastai 2.0.18 has requirement fastcore<1.3,>=1.1, but you'll have fastcore 1.3.0 which is incompatible\""}
+{"query": "when to use label encoding vs one hot encoding categorical variables", "post_id": "18842", "topic_id": "6057", "topic_title": "To Label Encode or One Hot Encode?"}
+{"query": "fastai v2 tabular dataloader error could not do one pass", "post_id": "226266", "topic_id": "64189", "topic_title": "Error while using tabular in v2"}
+{"query": "fastai 2.0 guided walkthrough practical deep learning tutorial notebooks", "post_id": "202748", "topic_id": "57161", "topic_title": "Moved- See Edit! A Guided Walk-through of 2.0 (Like Practical Deep Learning for Coders)"}
+{"query": "how to make predictions with fastai tabular model on raw tensor input", "post_id": "205176", "topic_id": "58076", "topic_title": "Learn.model input? (Tabular)"}
+{"query": "lr_find() read-only file system error kaggle", "post_id": "349869", "topic_id": "108440", "topic_title": "Using lr_find() gives me an unexpected OSError"}
+{"query": "Sylvain Gugger fast.ai interview Chai Time Data Science Podcast", "post_id": "216956", "topic_id": "62103", "topic_title": "AMA Interview with Sylvain Gugger | Chai Time Data Science Podcast"}
+{"query": "ImageDataBunch from_folder valid_pct test parameter error UnboundLocalError", "post_id": "104413", "topic_id": "28292", "topic_title": "Bug when using ImageDataBunch.from_folder and valid_pct with test"}
+{"query": "Ubuntu urllib urlopen cannot download torchvision models error", "post_id": "177780", "topic_id": "48492", "topic_title": "Ubuntu urlopen problem (cannot load torchvision models)"}
+{"query": "learn.TTA(is_test=True) NoneType object is not iterable error", "post_id": "73871", "topic_id": "18366", "topic_title": "Lesson 3: learn.TTA(is_test=True) is giving the error 'NoneType' object is not iterable"}
+{"query": "how to use feature importance and partial dependence in fastai tabular models", "post_id": "202110", "topic_id": "56949", "topic_title": "Football Transfer case as an example of Feature Importance and Partial Dependence in tabular models"}
+{"query": "why does shuffling learning rates in lr_find give worse results than exponentially increasing them", "post_id": "32055", "topic_id": "8240", "topic_title": "Behavior of lr_find - Shuffling LRs"}
+{"query": "jupyter lab vs jupyter notebook", "post_id": "31331", "topic_id": "8141", "topic_title": "Try out \"Jupyter Lab\""}
+{"query": "how to use ULMFit for sequence tagging NER POS", "post_id": "79789", "topic_id": "20328", "topic_title": "ULMFit for sequence tagging"}
+{"query": "collaborative filtering sparse matrix metadata latent factors", "post_id": "808", "topic_id": "211", "topic_title": "Collaborative filtering matrix sparcity"}
+{"query": "how to save non numeric data in fastai recorder", "post_id": "153021", "topic_id": "41534", "topic_title": "Expand Recorder to deal with non int/float data"}
+{"query": "LSTM time series forecasting Kaggle web traffic slow training", "post_id": "16818", "topic_id": "5103", "topic_title": "Time Series Forecasting with RNNs"}
+{"query": "how to use adadelta optimizer with fastai learner", "post_id": "163256", "topic_id": "43996", "topic_title": "Learner with Adadelta"}
+{"query": "how to import PILImage from fastai", "post_id": "290304", "topic_id": "83906", "topic_title": "How to import PILImage?"}
+{"query": "fastai multiple text input columns text classifier", "post_id": "286247", "topic_id": "82202", "topic_title": "How to text_classifier_learner with multiple text input blocks?"}
+{"query": "matrix calculus for deep learning course", "post_id": "256837", "topic_id": "71894", "topic_title": "Announcing a New Mini Course on \"The Matrix Calculus You Need For Deep Learning\""}
+{"query": "plot_confusion_matrix error with mixup callback fastai", "post_id": "276572", "topic_id": "78535", "topic_title": "[Fastbook] Chapter 7: plot_confusion_matrix() returns error when using mixup in cnn_leaner"}
+{"query": "how to convert math equations to numpy code", "post_id": "261049", "topic_id": "73256", "topic_title": "Math to Code \u2014 Interactive Numpy tutorial for engineers"}
+{"query": "how to classify alien vs predator images using fast.ai", "post_id": "104555", "topic_id": "28329", "topic_title": "Free GPU-Google Colab-Fast.ai(Course-Part-1-V3) --> Lesson 1 -HW- Alien vs. Predator images"}
+{"query": "how to set up paperspace for fast.ai course", "post_id": "272356", "topic_id": "76908", "topic_title": "Paperspace Setup Instructions"}
+{"query": "how to configure nbdev preview address for remote server access", "post_id": "327480", "topic_id": "98726", "topic_title": "[Remote Development] configure address for live preview"}
+{"query": "free cloud GPU credits for deep learning course", "post_id": "323424", "topic_id": "97348", "topic_title": "Cloud Credits or discount to start Deep Learning course"}
+{"query": "language model accuracy metric meaning fast.ai", "post_id": "77383", "topic_id": "19574", "topic_title": "Language model accuracy"}
+{"query": "fast.ai lesson 7 questions discussion", "post_id": "124371", "topic_id": "32554", "topic_title": "Lesson 7 in-class chat \u2705"}
+{"query": "cuda runtime error out of memory", "post_id": "275572", "topic_id": "78084", "topic_title": "Cuda runtime"}
+{"query": "fast.ai lesson videos ahead of notebooks mismatch which to do first", "post_id": "49312", "topic_id": "12242", "topic_title": "It seems the Lesson 2 Video pertains to the Lesson 1 Notebook (videos are ahead by 1 lesson)"}
+{"query": "why is get_image_files returning empty list", "post_id": "304007", "topic_id": "89530", "topic_title": "Get_image_files(path) returning empty list"}
+{"query": "ImageClassifierCleaner scrollbar not working properly", "post_id": "350801", "topic_id": "108914", "topic_title": "Lesson 2: ImageClassifierCleaner scrollbar display is incomplete"}
+{"query": "why are there no pretrained models for tabular data", "post_id": "305755", "topic_id": "90258", "topic_title": "Why aren't there many pre-trained models for tabular data?"}
+{"query": "how to load images from subfolders with ImageDataBunch in fast.ai", "post_id": "100850", "topic_id": "27621", "topic_title": "Questions about ImageDataBunch.from_name_re and ImageDataBunch.from_folder"}
+{"query": "camvid dataset not downloading fast.ai lesson 3", "post_id": "225097", "topic_id": "63872", "topic_title": "Camvid Lesson 3 - IndexError"}
+{"query": "pytorch curriculum learning load model different number of classes", "post_id": "179781", "topic_id": "49266", "topic_title": "Trying to test Curriculum Learning, getting CUDA error"}
+{"query": "best framework for rapid deep learning architecture experimentation", "post_id": "289547", "topic_id": "83556", "topic_title": "Framework for fast experimentation for DL architectures"}
+{"query": "does large batch size affect model accuracy training", "post_id": "220793", "topic_id": "62903", "topic_title": "Using Large batch_size for DataLoader?"}
+{"query": "how to check training data information from saved pytorch model", "post_id": "324726", "topic_id": "97755", "topic_title": "Info on training set stored on saved model?"}
+{"query": "why are there 3 different sigmoids in LSTM cells", "post_id": "14780", "topic_id": "4160", "topic_title": "Understanding LSTMs - Regarding the 3 sigmoids in Chris Olah's blog"}
+{"query": "pytorch prefetch feature maps to cpu gpu memory", "post_id": "137811", "topic_id": "37134", "topic_title": "How to offload/prefetch feature maps in PyTorch?"}
+{"query": "difference between learn.fit and learn.predict fastai", "post_id": "55626", "topic_id": "13836", "topic_title": "Learn.fit vs learn.predict"}
+{"query": "do fast.ai notebooks work on windows", "post_id": "81736", "topic_id": "20962", "topic_title": "What environments are these notebooks tested in?"}
+{"query": "fastai dual text input datablock padding issue", "post_id": "279963", "topic_id": "79820", "topic_title": "How to correctly pad text in dual-text DataBlocks?"}
+{"query": "how to use ImageClassifierData.from_arrays for image classification", "post_id": "199121", "topic_id": "55905", "topic_title": "ImageClassifierData.from_array explanation"}
+{"query": "how to fix language model data invalid size dimension error fastai", "post_id": "31626", "topic_id": "8174", "topic_title": "Given sequence has an invalid size of dimension 2: 0"}
+{"query": "how to set up vim for coding ubuntu", "post_id": "80158", "topic_id": "20443", "topic_title": "How to install, configure, and use Vim for development"}
+{"query": "Two Minute Papers YouTube channel deep learning research", "post_id": "8384", "topic_id": "2136", "topic_title": "Two Minute Papers"}
+{"query": "softmax confidence for out of distribution examples", "post_id": "75457", "topic_id": "18868", "topic_title": "Clarification about softmax"}
+{"query": "how to access fast.ai theory wiki forum", "post_id": "132882", "topic_id": "35337", "topic_title": "Access to /theory wiki?"}
+{"query": "how to specify custom mean and standard deviation for tabular learner normalization", "post_id": "312164", "topic_id": "93228", "topic_title": "Tabular Learner Normalizing continues variables based on the costume Mean and Std"}
+{"query": "detectron2 integration with fastai object detection", "post_id": "208203", "topic_id": "59154", "topic_title": "Detectron2 anyone?"}
+{"query": "how to fix 403 error downloading cnn model fast.ai", "post_id": "222371", "topic_id": "63247", "topic_title": "HTTP error 403 downloading cnn"}
+{"query": "how to implement GAN loss functions in pytorch from paper equations", "post_id": "49403", "topic_id": "12266", "topic_title": "Trying to make sense of GAN losses"}
+{"query": "GPU cloud platform for deep learning with free credits", "post_id": "287763", "topic_id": "82841", "topic_title": "One click - GPU Cloud Platform[cloud.jarvislabs.ai] - Free 20$ Credit [50+ hours of GPU time]"}
+{"query": "imbalanced dataset for image classification with limited data per class", "post_id": "16939", "topic_id": "5140", "topic_title": "Theoretical Explanation: Good Dataset"}
+{"query": "nvidia-smi failed couldn't communicate with nvidia driver", "post_id": "153106", "topic_id": "41557", "topic_title": "NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver"}
+{"query": "fastai cuDNN error CUDNN_STATUS_BAD_PARAM after update", "post_id": "180141", "topic_id": "49392", "topic_title": "Cuda errors after update"}
+{"query": "how to run jupyter notebook automatically on system startup aws", "post_id": "2574", "topic_id": "749", "topic_title": "Run jupyter notebook on system boot"}
+{"query": "how to calculate weighted mean absolute error with holiday weights in fastai", "post_id": "34997", "topic_id": "8575", "topic_title": "How to calculate Weighted Mean Absolute Error (WMAE)?"}
+{"query": "difference between p.grad = None and p.grad.zero_() pytorch", "post_id": "290863", "topic_id": "84135", "topic_title": "Chapter 4: Question on Stepping Weights"}
+{"query": "how to download images for multiple classes fastai", "post_id": "105766", "topic_id": "28560", "topic_title": "Datasets: downloading images for multiple classes"}
+{"query": "ImageDataBunch from_folder test dataset not working", "post_id": "249934", "topic_id": "69656", "topic_title": "ImageDataBunch.from_folder does not accept the test dataset"}
+{"query": "how to improve image classification model accuracy overfitting", "post_id": "165898", "topic_id": "44585", "topic_title": "Airbus model classifier with low accuracy"}
+{"query": "fastai cookbook for beginners", "post_id": "308870", "topic_id": "91627", "topic_title": "New beginners book on fastai"}
+{"query": "how to build dynamic unet with pretrained encoder", "post_id": "301668", "topic_id": "88570", "topic_title": "Building Dynamic Unets"}
+{"query": "why are predictions returned in log scale fastai learn.predict", "post_id": "77961", "topic_id": "19773", "topic_title": "Why log scale is used in the function learn.predict"}
+{"query": "fastai v1 SSD object detection notebook", "post_id": "188678", "topic_id": "52512", "topic_title": "SSD Object Detection in V1"}
+{"query": "fit_generator vs fit keras accuracy difference shuffle", "post_id": "26853", "topic_id": "7627", "topic_title": "Fit_generator() v fit() -- different levels of accuracy"}
+{"query": "DICOM images displaying black when using fastai PILDicom create", "post_id": "241619", "topic_id": "67407", "topic_title": "DICOM images not displaying correctly"}
+{"query": "how to download Kaggle dataset using curl command in Crestle", "post_id": "23331", "topic_id": "7206", "topic_title": "How to Download a Kaggle competition Dataset in Crestle"}
+{"query": "how do differential learning rates work in fast.ai", "post_id": "24159", "topic_id": "7320", "topic_title": "Question on how differential learning rates are applied to model"}
+{"query": "how to fix negative R squared in neural network", "post_id": "37184", "topic_id": "8883", "topic_title": "Negative R^2?"}
+{"query": "how to precompute convolutional layers with data augmentation in keras", "post_id": "16193", "topic_id": "4824", "topic_title": "Precomputing conv layers WITH data augmentation"}
+{"query": "super resolution tensor size mismatch error fastai", "post_id": "176266", "topic_id": "47928", "topic_title": "SuperResolution: How to troubleshoot tensor size mismatch error?"}
+{"query": "how to improve Food-101 dataset ResNet34 accuracy deep learning", "post_id": "242803", "topic_id": "67726", "topic_title": "Running 10 epocs on the Food-101 dataset"}
+{"query": "google analytics tracking not working jekyll config.yaml", "post_id": "240425", "topic_id": "67161", "topic_title": "Google Analytics Question"}
+{"query": "how to add title to show_batch segmentation fastai", "post_id": "302143", "topic_id": "88716", "topic_title": "How to add title in show_batch for SegmentationDataLoaders"}
+{"query": "pycharm remote server not printing training output table fastai fine_tune", "post_id": "340630", "topic_id": "104007", "topic_title": "Training cell not printing"}
+{"query": "Indian classical dance classifier Chhau Kathakali", "post_id": "269795", "topic_id": "75917", "topic_title": "Created a web app that distinguishes between two classical dance forms of India"}
+{"query": "house prices kaggle competition feature names mismatch fit time error", "post_id": "333292", "topic_id": "101403", "topic_title": "Problem with cat, cont variable in House Price kaggle competiton"}
+{"query": "keras 2 release backwards compatible changes", "post_id": "7363", "topic_id": "1956", "topic_title": "Keras 2 Released"}
+{"query": "face recognition labeled faces in the wild dataset deep learning", "post_id": "35159", "topic_id": "8596", "topic_title": "Face Recognition with Labeled Faces in the Wild dataset"}
+{"query": "unsupervised feature learning deep neural networks vs SIFT", "post_id": "69282", "topic_id": "16956", "topic_title": "Unsupervised feature learning with deep learning"}
+{"query": "xresnet n_out default value how does it work", "post_id": "306173", "topic_id": "90430", "topic_title": "Xresnet n_out"}
+{"query": "nll_loss_seq lesson 6 fast.ai", "post_id": "98456", "topic_id": "27113", "topic_title": "Nll_loss_seq lesson 6 question"}
+{"query": "accuracy_multi same size input target what does it mean", "post_id": "284962", "topic_id": "81674", "topic_title": "Accuracy_multi"}
+{"query": "how to create TabularPandas from list instead of dataframe", "post_id": "306175", "topic_id": "90431", "topic_title": "How to create Tabularpandas from a list, instead of a dataframe?"}
+{"query": "difference between pre-trained and pre-computed in deep learning", "post_id": "40861", "topic_id": "9706", "topic_title": "Whats the difference between Pre-Trained and Pre-Computed?"}
+{"query": "how to copy folder from Windows to WSL Linux directory cp command error", "post_id": "34294", "topic_id": "8480", "topic_title": "Unable to copy folder from hard derive to courses/dl1/data"}
+{"query": "how to fix google cloud CLI installation error ubuntu malformed source list", "post_id": "222738", "topic_id": "63344", "topic_title": "Cannot Install Google Cloud\u2019s command line interface (CLI)"}
+{"query": "how to automatically generate Anki flashcards from jupyter notebooks", "post_id": "323321", "topic_id": "97325", "topic_title": "Anki Deck Generator"}
+{"query": "can't optimize non-leaf Tensor error lr_find second time", "post_id": "91703", "topic_id": "24875", "topic_title": "\"can't optimize non-leaf Tensor\" error with learn.fit_one_cycle after running/plotting lr_find a second time"}
+{"query": "graddesc.xlsm error function derivative sign discrepancy", "post_id": "45533", "topic_id": "11015", "topic_title": "Question about graddesc.xlsm"}
+{"query": "how to apply training normalization stats to test data fastai", "post_id": "135314", "topic_id": "36243", "topic_title": "Databunch normalization"}
+{"query": "pytorch mean() input dtype should be floating point or complex dtypes got long instead", "post_id": "339178", "topic_id": "103407", "topic_title": "RuntimeError: mean(): input dtype should be either floating point or complex dtypes. Got Long instead"}
+{"query": "fastai collab_learner size mismatch error loading trained model", "post_id": "311345", "topic_id": "92768", "topic_title": "Size mismatch error when loading trained model (collab_learner)"}
+{"query": "databricks fastai display issue", "post_id": "261001", "topic_id": "73243", "topic_title": "Using databricks for fastai"}
+{"query": "where to download glove vectors words.txt and wordsidx.txt files", "post_id": "82416", "topic_id": "21278", "topic_title": "Word Embedings"}
+{"query": "deep visualization toolkit importerror libstdc++ caffe", "post_id": "17412", "topic_id": "5343", "topic_title": "'Deep Visualisation Toolkit' ImportError problem"}
+{"query": "fastai v2 regex error from_name_re not matching filenames", "post_id": "225846", "topic_id": "64095", "topic_title": "Fastai v2 Vision Example regex error"}
+{"query": "chest xray dataset lung diseases NIH", "post_id": "32903", "topic_id": "8346", "topic_title": "New high-quality chest xray dataset on lung deceases"}
+{"query": "fastai printed metrics different from actual validation results FBeta", "post_id": "171711", "topic_id": "46387", "topic_title": "Difference between printed metrics and actual metrics"}
+{"query": "how to share files between ec2 instances", "post_id": "12977", "topic_id": "3413", "topic_title": "Can ec2 instances share the same file system?"}
+{"query": "model overfitting high accuracy dev set poor test predictions", "post_id": "85947", "topic_id": "22527", "topic_title": "Trash predictions for test set besides great values on dev set"}
+{"query": "ImageList.from_df adding ./ to filenames error", "post_id": "191289", "topic_id": "53447", "topic_title": "ImageList.from_df add './' by default in front of filenames?"}
+{"query": "should I use a custom loss function to optimize F1 score instead of binary cross entropy", "post_id": "95744", "topic_id": "26314", "topic_title": "Is unchanged loss function really guiding loss efficiently when F1 not accuracy is the metric?"}
+{"query": "how to handle categorical variable with different distribution in tabular learner", "post_id": "305405", "topic_id": "90104", "topic_title": "Tabular learner with one category different distribution"}
+{"query": "nbdev documentation only site without library error", "post_id": "333119", "topic_id": "101339", "topic_title": "Get error while creating documentation only site"}
+{"query": "how to use cadene pretrained models with fastai", "post_id": "73919", "topic_id": "18384", "topic_title": "Using Pretrained Models from Cadene repository"}
+{"query": "fastai2 dataloaders show_batch AttributeError error", "post_id": "254464", "topic_id": "71046", "topic_title": "Error running the 10_tutorial.pets notebook from fastai2 tutorials"}
+{"query": "how to handle images that don't match any training categories in classification", "post_id": "66899", "topic_id": "16210", "topic_title": "\"None\" / \"Anything else\" category"}
+{"query": "how to make language model generate rhyming lyrics", "post_id": "168619", "topic_id": "45317", "topic_title": "Language Model with Rhyme"}
+{"query": "how to improve recall when training loss is nearly zero", "post_id": "193569", "topic_id": "54157", "topic_title": "When to stop training a model?"}
+{"query": "how to prepare training data for multi-class semantic segmentation with one-hot encoded labels", "post_id": "71062", "topic_id": "17494", "topic_title": "What is the best way to generate a training batch for a semantic segmentation project with multiple classes"}
+{"query": "how to add test dataset to ImageData.get_ds in fast.ai", "post_id": "77492", "topic_id": "19612", "topic_title": "ImageData.get_ds and test dataset"}
+{"query": "ML reproducibility challenge 2020 fastai", "post_id": "281344", "topic_id": "80336", "topic_title": "Reproducibility Challenge 2020 - fastai folks interested"}
+{"query": "how to use albumentation different transforms for train and validation dataset in fastai", "post_id": "287316", "topic_id": "82642", "topic_title": "Albumentation transformations for train and test dataset"}
+{"query": "how to speed up deep learning training by filtering high loss samples", "post_id": "201304", "topic_id": "56621", "topic_title": "Meet BatchLossFilter: a new technique to speed up training"}
+{"query": "download_images function not working fast.ai lesson 2", "post_id": "287630", "topic_id": "82781", "topic_title": "Lesson 02: download_images() function not working"}
+{"query": "how many layers does transfer learning add to the head of a pretrained model", "post_id": "273376", "topic_id": "77262", "topic_title": "Lesson 1: Head of a Model specifics"}
+{"query": "how to fix memory error when training neural network with small batch size", "post_id": "998", "topic_id": "228", "topic_title": "Memory Error issue"}
+{"query": "why use log of sales in rossmann kaggle competition", "post_id": "44817", "topic_id": "10820", "topic_title": "Lesson3 - Why using log of sales in Rossmann exercice and overfitting?"}
+{"query": "why does tabular pandas change loss function when resetting splits", "post_id": "327925", "topic_id": "98891", "topic_title": "Reset TabularPandas split changes loss function"}
+{"query": "how to use custom data generator with ConvLearner fast.ai", "post_id": "116669", "topic_id": "30629", "topic_title": "Create data object (for ConvLearner ) using custom data generator"}
+{"query": "fastai 1.0.15 ImageDataBunch normalize imagenet_stats", "post_id": "105756", "topic_id": "28558", "topic_title": "New fastai 1.0.15 update - How to use tfms, imagenet_norm?"}
+{"query": "how to build OCR and NLP model for ancient texts in non-English languages", "post_id": "325869", "topic_id": "98153", "topic_title": "NLP in other languages (ancient books)-Week 4"}
+{"query": "fast.ai live coding session 14 discussion", "post_id": "322115", "topic_id": "97011", "topic_title": "Live coding 14"}
+{"query": "how to install fastai v2 on Windows 10", "post_id": "291093", "topic_id": "84231", "topic_title": "Installation of fastai v2 on Windows"}
+{"query": "how to use subset of training data with fastai DataBlock", "post_id": "244600", "topic_id": "68131", "topic_title": "Get a subset of the available training/validation set using high level DataBlocks"}
+{"query": "how to build a medical symptom disease predictor model", "post_id": "307147", "topic_id": "90855", "topic_title": "Symptoms to Disease predictor going bezerk"}
+{"query": "how to use focal loss in fastai custom loss function", "post_id": "124322", "topic_id": "32538", "topic_title": "Applying FocalLoss in fastai"}
+{"query": "how to create validation set from training data fast.ai from_path", "post_id": "67434", "topic_id": "16367", "topic_title": "Create validation set when using from_path format"}
+{"query": "fastai distributed training stuck with multiple GPUs not progressing", "post_id": "162896", "topic_id": "43900", "topic_title": "Distributed training stuck when using multiple GPUs"}
+{"query": "fastai 1.0.60 TypeError blank() unexpected keyword argument disable load_learner predict", "post_id": "294347", "topic_id": "85551", "topic_title": "TypeError: blank() got an unexpected keyword argument 'disable'"}
+{"query": "patch_to decorator explanation fast.ai", "post_id": "192012", "topic_id": "53700", "topic_title": "Patch_to code walkthrough"}
+{"query": "multi-GPU training different GPU models Titan X Pascal Titan XP", "post_id": "17149", "topic_id": "5239", "topic_title": "How hard is it to parallelize model training across a Titan X Pascal (2016) and a Titan XP (2017)?"}
+{"query": "sentiment analysis model poor accuracy on test data despite high training accuracy", "post_id": "292050", "topic_id": "84564", "topic_title": "Sentiment analysis accuracy - Lesson 1"}
+{"query": "queue.Full error lesson1 fast.ai", "post_id": "25836", "topic_id": "7517", "topic_title": "queue.Full Error When Running Lesson1"}
+{"query": "fastai study groups GMT UTC timezone schedule", "post_id": "333483", "topic_id": "101459", "topic_title": "All online Study groups with GMT/UTC timezone"}
+{"query": "can i run fastai tutorials without gpu", "post_id": "267388", "topic_id": "75206", "topic_title": "Can i run the tutorials without using gpu?"}
+{"query": "how to shuffle data groups each epoch in fast.ai without shuffling within groups", "post_id": "163780", "topic_id": "44077", "topic_title": "Best way to change training dataset order on every epoch (rotationNet)?"}
+{"query": "alternative to reinforcement learning for choosing actions in turn-based games", "post_id": "193319", "topic_id": "54090", "topic_title": "Some idea for choosing action (without reinforcement learning)"}
+{"query": "how to use transfer learning when changing number of classes", "post_id": "178209", "topic_id": "48651", "topic_title": "Transfer learning when the number of class changes"}
+{"query": "deep neural networks structured data kaggle competition results", "post_id": "65976", "topic_id": "15946", "topic_title": "[Kaggle] TalkingData AdTracking Fraud Detection Challenge"}
+{"query": "disease prediction from accelerometer sensor images deep learning", "post_id": "46499", "topic_id": "11330", "topic_title": "Deep Learning for accelerometer image data of x, y, z axis"}
+{"query": "how to retrain image recognition model with user uploaded data in production", "post_id": "181068", "topic_id": "49710", "topic_title": "How to solve image recognition issue after the production period?"}
+{"query": "how to use subset of data for training fast.ai", "post_id": "108461", "topic_id": "29021", "topic_title": "Parameter to choose the amount of data to train?"}
+{"query": "how to handle failed imports with logging in jupyter notebook without nbdev warnings", "post_id": "327582", "topic_id": "98758", "topic_title": "Mixing imports and \"computations\""}
+{"query": "what's the difference between cnn_learner and Learner in fast.ai", "post_id": "263969", "topic_id": "74078", "topic_title": "Difference between cnn_learner and Learner?"}
+{"query": "get_image_files not working paperspace gradient", "post_id": "275901", "topic_id": "78241", "topic_title": "Get_image_files(path)"}
+{"query": "how to handle memory issues with too many features in machine learning", "post_id": "22560", "topic_id": "7114", "topic_title": "Handling Memory: Reduce features, split test sets or user err"}
+{"query": "how to use generator for data loading in fast.ai instead of folder structure", "post_id": "24693", "topic_id": "7396", "topic_title": "Loading data via generator instead of folders"}
+{"query": "how to use conv1d with tabular data dimensions", "post_id": "150336", "topic_id": "40943", "topic_title": "Conv1d on tabular data"}
+{"query": "how to download fast.ai part 2 lectures as mp4", "post_id": "60714", "topic_id": "14758", "topic_title": "Part 2 video downloads"}
+{"query": "huggingface hub model specified but package not installed error fastai resnet", "post_id": "349203", "topic_id": "108138", "topic_title": "\"Hugging Face hub model specified but package not installed\" Lesson 6 Road to Top Part1"}
+{"query": "feature importance neural networks pytorch", "post_id": "76147", "topic_id": "19129", "topic_title": "Measuring Feature Importance in NNets for structured data"}
+{"query": "imagecleaner valid_loss showing na values after cleaning dataset", "post_id": "180449", "topic_id": "49502", "topic_title": "#na# value in valid_loss when doing fit_one_cycle after ImageCleaner"}
+{"query": "how to crop images from object detection bounding box predictions", "post_id": "229830", "topic_id": "65002", "topic_title": "Cropping images based on the predicted bounding boxes"}
+{"query": "GTX 970 faster than AWS K80 GPU training", "post_id": "20893", "topic_id": "6821", "topic_title": "Impressive speedup on old GPU"}
+{"query": "tokenizer process_all BrokenProcessPool error", "post_id": "140771", "topic_id": "38115", "topic_title": "Tokenizer.process_all error BrokenProcessPool"}
+{"query": "fastai lesson 2 FileDeleter and defaults attribute errors", "post_id": "134544", "topic_id": "35967", "topic_title": "Lesson 2 Errors: FileDeleter and 'defaults\" attribute"}
+{"query": "fast.ai semantic code search github", "post_id": "70088", "topic_id": "17199", "topic_title": "An Awesome New Example of a Fast.AI Powered Product In Industry"}
+{"query": "fast.ai part 1 study group discord", "post_id": "367949", "topic_id": "121223", "topic_title": "2025 Part 1 Study Group"}
+{"query": "how to finetune ELECTRA on GLUE benchmark with fastai", "post_id": "259596", "topic_id": "72875", "topic_title": "Pretrain & Finetune MLM - 6: Reproduce GLUE finetuning results"}
+{"query": "pytorch cuda version compatibility requirements", "post_id": "21254", "topic_id": "6880", "topic_title": "Cuda and pytorch versions"}
+{"query": "fast.ai courses guide where to start", "post_id": "210093", "topic_id": "59844", "topic_title": "What course is what? Where should I start? A Guide"}
+{"query": "fastpages github pages site not showing up", "post_id": "321005", "topic_id": "96773", "topic_title": "Fastpages 'There isn't a GitHub Pages site here' forever"}
+{"query": "kaggle pip install fastkaggle connection error temporary failure in name resolution", "post_id": "346707", "topic_id": "106828", "topic_title": "Error when trying to import !pip3 install -Uqq fastkaggle in Kaggle"}

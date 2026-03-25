@@ -19,12 +19,17 @@ Output:
     data/embeddings/posts.pkl     - post metadata + text (parallel to index)
 """
 
+import argparse
 import json
+import os
 import pickle
 import re
 import sys
 import time
 from pathlib import Path
+
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+os.environ.setdefault("OMP_NUM_THREADS", "1")  # prevents loky/OpenMP deadlock on macOS with mpnet
 
 try:
     import faiss
@@ -124,26 +129,66 @@ def load_posts() -> list[dict]:
     return posts
 
 
-def build_index(posts: list[dict], device: str) -> None:
-    EMBEDDINGS_DIR.mkdir(parents=True, exist_ok=True)
+def build_index(posts: list[dict], device: str, out_dir: Path = None, variant: str = "baseline", model_name: str = None, batch_size: int = None, max_seq_length: int = None) -> None:
+    if out_dir is None:
+        out_dir = EMBEDDINGS_DIR
+    out_dir.mkdir(parents=True, exist_ok=True)
+    faiss_file = out_dir / "index.faiss"
+    posts_file = out_dir / "posts.pkl"
 
-    print(f"Loading embedding model '{MODEL_NAME}' …")
-    model = SentenceTransformer(MODEL_NAME, device=device)
+    # Models known to have platform-specific issues on Apple Silicon / MPS:
+    #   all-mpnet-base-v2          — hangs at batch 0 unless OMP_NUM_THREADS=1 (already set above)
+    #   nomic-ai/nomic-embed-text-v1 — requires `pip install einops`, trust_remote_code=True,
+    #                                  and max_seq_length<=512 to avoid 48GB MPS OOM
+    # If either model fails, multi-qa-MiniLM-L6-cos-v1 is a strong fallback:
+    #   eval scores: R@1=0.290, MRR=0.410 vs nomic R@1=0.290, MRR=0.434
+    #   Run: python build_embeddings.py --model multi-qa-MiniLM-L6-cos-v1
+
+    name = model_name or MODEL_NAME
+    print(f"Loading embedding model '{name}' …")
+    try:
+        model = SentenceTransformer(name, device=device, trust_remote_code=True)
+    except Exception as e:
+        print(f"\nERROR: Failed to load model '{name}': {e}")
+        if name in ("all-mpnet-base-v2", "nomic-ai/nomic-embed-text-v1"):
+            print("This model is known to have platform-specific issues.")
+            print("Fallback: python build_embeddings.py --model multi-qa-MiniLM-L6-cos-v1")
+        raise
+    if max_seq_length is not None:
+        model.max_seq_length = max_seq_length
+        print(f"Max sequence length: {max_seq_length} tokens")
     dim = model.get_sentence_embedding_dimension()
     print(f"Embedding dimension: {dim}")
 
-    # Truncate text before embedding (model has a 256-token limit anyway)
-    texts = [p["text"][:MAX_TEXT_CHARS] for p in posts]
+    if variant == "title-prefix":
+        # Prepend topic title; sentence-transformers handles token-aware truncation
+        texts = [f"{p['topic_title']}\n\n{p['text']}" for p in posts]
+        print("Variant: title-prefix (topic title prepended, token-aware truncation)")
+    else:
+        # baseline: character-truncated text, no title
+        texts = [p["text"][:MAX_TEXT_CHARS] for p in posts]
+        print("Variant: baseline (char-truncated text, no title prefix)")
 
-    print(f"Embedding {len(texts):,} posts in batches of {BATCH_SIZE} …")
+    effective_batch_size = batch_size or BATCH_SIZE
+    print(f"Embedding {len(texts):,} posts in batches of {effective_batch_size} …")
     t0 = time.time()
-    embeddings = model.encode(
-        texts,
-        batch_size=BATCH_SIZE,
-        show_progress_bar=True,
-        convert_to_numpy=True,
-        normalize_embeddings=True,   # normalise for cosine similarity via dot product
-    )
+    try:
+        embeddings = model.encode(
+            texts,
+            batch_size=effective_batch_size,
+            show_progress_bar=True,
+            convert_to_numpy=True,
+            normalize_embeddings=True,   # normalise for cosine similarity via dot product
+        )
+    except Exception as e:
+        print(f"\nERROR: Embedding failed for model '{name}': {e}")
+        if name == "all-mpnet-base-v2":
+            print("Tip: ensure OMP_NUM_THREADS=1 is set (prevents loky deadlock on macOS).")
+        elif name == "nomic-ai/nomic-embed-text-v1":
+            print("Tip: this model needs max_seq_length<=512 to avoid MPS memory errors.")
+            print("     Pass --max-seq-length 512 if calling from the CLI.")
+        print("Fallback: python build_embeddings.py --model multi-qa-MiniLM-L6-cos-v1")
+        raise
     elapsed = time.time() - t0
     print(f"Embedding took {elapsed:.0f}s ({len(texts)/elapsed:.0f} posts/sec)")
 
@@ -153,18 +198,41 @@ def build_index(posts: list[dict], device: str) -> None:
     index.add(embeddings.astype(np.float32))
     print(f"Index contains {index.ntotal:,} vectors")
 
-    print(f"Saving index to {FAISS_INDEX_FILE} …")
-    faiss.write_index(index, str(FAISS_INDEX_FILE))
+    print(f"Saving index to {faiss_file} …")
+    faiss.write_index(index, str(faiss_file))
 
-    print(f"Saving post metadata to {POSTS_META_FILE} …")
-    with open(POSTS_META_FILE, "wb") as f:
+    print(f"Saving post metadata to {posts_file} …")
+    with open(posts_file, "wb") as f:
         pickle.dump(posts, f)
 
-    size_mb = (FAISS_INDEX_FILE.stat().st_size + POSTS_META_FILE.stat().st_size) / 1e6
+    size_mb = (faiss_file.stat().st_size + posts_file.stat().st_size) / 1e6
     print(f"Done. Total size: {size_mb:.0f} MB")
 
 
 if __name__ == "__main__":
-    device = select_device()
+    parser = argparse.ArgumentParser(description="Build FAISS embedding index")
+    parser.add_argument(
+        "--out-dir", type=Path, default=None,
+        help="Output directory for index.faiss and posts.pkl (default: data/embeddings/)",
+    )
+    parser.add_argument(
+        "--variant", choices=["baseline", "title-prefix"], default="title-prefix",
+        help="Text preparation variant (default: title-prefix)",
+    )
+    parser.add_argument(
+        "--model", type=str, default=None,
+        help=f"Embedding model name (default: {MODEL_NAME})",
+    )
+    parser.add_argument(
+        "--device", type=str, default=None,
+        help="Device to use for embedding (default: auto-detect mps/cuda/cpu)",
+    )
+    parser.add_argument(
+        "--max-seq-length", type=int, default=None,
+        help="Override model max sequence length (e.g. 512 for nomic on MPS to avoid OOM)",
+    )
+    args = parser.parse_args()
+
+    device = args.device or select_device()
     posts = load_posts()
-    build_index(posts, device)
+    build_index(posts, device, out_dir=args.out_dir, variant=args.variant, model_name=args.model, max_seq_length=args.max_seq_length)

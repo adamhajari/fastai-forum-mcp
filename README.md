@@ -5,7 +5,7 @@ Incrementally crawls [forums.fast.ai](https://forums.fast.ai) using the Discours
 ## Usage
 1. Crawl the forum. First run downloads pre-crawled history from Hugging Face, then fetches any new posts since that snapshot. Subsequent runs are incremental (~minutes).
 2. Build the search index (run once after crawling, ~few minutes)
-3. Build the semantic vector index (run once after crawling, ~few minutes)
+3. Build the semantic vector index (run once after crawling, ~20 minutes)
 
 ```bash
 git clone https://github.com/adamhajari/fastai-forum-mcp
@@ -19,8 +19,18 @@ uv run python forum_crawler.py --stats  # show stats without crawling
 # build BM25 search index
 uv run python build_index.py
 
-# build FAISS semantic vector index
-uv run python build_embeddings.py
+# build FAISS semantic vector index (recommended model)
+uv run python build_embeddings.py --model nomic-ai/nomic-embed-text-v1 --max-seq-length 512
+```
+
+#### Embedding model
+
+`nomic-ai/nomic-embed-text-v1` gave the best eval results (MRR=0.434, R@1=0.290 on 200 held-out queries). It requires the `einops` package (already in `pyproject.toml`) and `--max-seq-length 512` to avoid out-of-memory errors on Apple Silicon MPS.
+
+If you run into issues with nomic, `multi-qa-MiniLM-L6-cos-v1` is a reliable fallback with nearly as strong results (MRR=0.410, R@1=0.290) and no special requirements:
+
+```bash
+uv run python build_embeddings.py --model multi-qa-MiniLM-L6-cos-v1
 ```
 
 ### Registering the MCP server with Claude Code
@@ -45,7 +55,7 @@ uv run python forum_crawler.py
 
 # 2. Rebuild indexes
 uv run python build_index.py
-uv run python build_embeddings.py
+uv run python build_embeddings.py --model nomic-ai/nomic-embed-text-v1 --max-seq-length 512
 
 # 3. Upload to Hugging Face (requires write access to adamhajari/fastai-forum)
 uv run python upload_to_hub.py
@@ -136,8 +146,6 @@ Posts are stored as a flat dict keyed by post ID. Replies are linked to their pa
 ## Search Index
 
 See [search-index-design.md](search-index-design.md) for design notes, current approach, and a documented alternative approach using SQLite FTS5.
-
----
 
 Posts are stored as a flat dict keyed by post ID. Replies are linked to their parent via `reply_to_post_number`. To look up a parent post:
 

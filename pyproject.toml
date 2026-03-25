@@ -9,4 +9,7 @@ dependencies = [
     "sentence-transformers",
     "faiss-cpu",
     "huggingface_hub",
+    "anthropic",
+    "scipy",
+    "einops>=0.8.2",
 ]
