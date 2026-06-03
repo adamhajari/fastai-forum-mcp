@@ -1,163 +1,112 @@
-# forums.fast.ai Crawler
+# fastai-forum-mcp
 
-Incrementally crawls [forums.fast.ai](https://forums.fast.ai) using the Discourse public JSON API and persists all topics and posts to disk.
+An [MCP](https://modelcontextprotocol.io/) server that gives coding agents RAG-style access to the [fast.ai forum](https://forums.fast.ai/). It searches ~200k community posts with hybrid keyword + semantic retrieval, so agents can answer course questions using up-to-date community knowledge instead of only the 2022 course materials.
 
-## Usage
-1. Crawl the forum. First run downloads pre-crawled history from Hugging Face, then fetches any new posts since that snapshot. Subsequent runs are incremental (~minutes).
-2. Build the search index (run once after crawling, ~few minutes)
-3. Build the semantic vector index (run once after crawling, ~20 minutes)
+## Quick start
 
 ```bash
 git clone https://github.com/adamhajari/fastai-forum-mcp
 cd fastai-forum-mcp
 uv sync
-
-# fetch history and crawl forum for new posts
-uv run python forum_crawler.py
-uv run python forum_crawler.py --stats  # show stats without crawling
-
-# build BM25 search index
-uv run python build_index.py
-
-# build FAISS semantic vector index (recommended model)
-uv run python build_embeddings.py --model nomic-ai/nomic-embed-text-v1 --max-seq-length 512
 ```
 
-#### Embedding model
-
-`nomic-ai/nomic-embed-text-v1` gave the best eval results (MRR=0.434, R@1=0.290 on 200 held-out queries). It requires the `einops` package (already in `pyproject.toml`) and `--max-seq-length 512` to avoid out-of-memory errors on Apple Silicon MPS.
-
-If you run into issues with nomic, `multi-qa-MiniLM-L6-cos-v1` is a reliable fallback with nearly as strong results (MRR=0.410, R@1=0.290) and no special requirements:
+**1. Get forum data** — on first run, the crawler downloads a pre-built snapshot from [Hugging Face](https://huggingface.co/datasets/adamhajari/fastai-forum), then fetches any newer posts incrementally (~minutes on subsequent runs):
 
 ```bash
-uv run python build_embeddings.py --model multi-qa-MiniLM-L6-cos-v1
+uv run python forum_crawler.py
 ```
 
-### Registering the MCP server with Claude Code
+**2. Build search indexes** — required before starting the MCP server. Run both after crawling (or after refreshing data):
 
-The repo includes a `.mcp.json` that works if you run Claude Code from within the `fastai-forum-mcp` directory. If you run Claude Code from a different directory (more common), add the server to your global Claude config instead:
+```bash
+uv run python build_index.py          # BM25 keyword index (~few minutes)
+uv run python build_embeddings.py     # FAISS semantic index (~20 minutes)
+```
+
+**3. Register the MCP server** with your agent. The repo includes `.mcp.json` for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) when run from this directory. From elsewhere, add it globally:
 
 ```bash
 claude mcp add fastai-forum -- uv --directory /path/to/fastai-forum-mcp run python mcp_server.py
 ```
 
-Replace `/path/to/fastai-forum-mcp` with the absolute path where you cloned this repo. Then restart Claude Code.
+Replace `/path/to/fastai-forum-mcp` with the absolute path to your clone, then restart Claude Code.
 
-The first run downloads pre-crawled data from [Hugging Face](https://huggingface.co/datasets/adamhajari/fastai-forum), then fetches any posts newer than that snapshot. Subsequent runs only fetch topics that have had new activity since the last run.
+## Using the `search_forum` tool
 
-## Updating the Hugging Face dataset
+The MCP exposes a single tool, `search_forum(query, n_results=20, mode="hybrid")`, which returns ranked post excerpts with URLs, dates, authors, and tags.
 
-After re-crawling, push the updated data to [huggingface.co/datasets/adamhajari/fastai-forum](https://huggingface.co/datasets/adamhajari/fastai-forum) so others can benefit from the latest posts:
+| Mode | Best for |
+|------|----------|
+| `hybrid` (default) | General questions — combines keyword and semantic ranking via reciprocal rank fusion |
+| `semantic` | Conceptual questions where wording may differ from the posts |
+| `bm25` | Exact error messages, function names, library versions |
 
-```bash
-# 1. Crawl new posts
-uv run python forum_crawler.py
+If the semantic index has not been built, `semantic` and `hybrid` fall back to `bm25`.
 
-# 2. Rebuild indexes
-uv run python build_index.py
-uv run python build_embeddings.py --model nomic-ai/nomic-embed-text-v1 --max-seq-length 512
+For agent behavior tips (when to search, how many queries to run), see [instructions.md](instructions.md).
 
-# 3. Upload to Hugging Face (requires write access to adamhajari/fastai-forum)
-uv run python upload_to_hub.py
+## How it works
+
+```
+forums.fast.ai  ──►  forum_crawler.py  ──►  data/posts/*.json
+                                              │
+                    build_index.py ──────────►│──► data/search_index.pkl (BM25)
+                    build_embeddings.py ─────►│──► data/embeddings/ (FAISS)
+                                              │
+                    mcp_server.py ◄───────────┘
+                         │
+                    search_forum tool
 ```
 
-The compressed archive is ~52MB (vs 237MB uncompressed), making uploads and downloads much faster.
+On startup, `mcp_server.py` loads both indexes into memory. Each search strips HTML from stored posts, runs the selected retrieval mode, and re-ranks by relevance plus light recency and like-count boosts. See [search-index-design.md](search-index-design.md) for ranking details and a documented SQLite FTS5 alternative.
 
-## File Structure
+## Embedding models
+
+`build_embeddings.py` defaults to `all-MiniLM-L6-v2` (fast, no extra deps). For higher retrieval quality, evals favored `nomic-ai/nomic-embed-text-v1` (requires `einops`, already in dependencies):
+
+```bash
+uv run python build_embeddings.py --model nomic-ai/nomic-embed-text-v1 --max-seq-length 512
+```
+
+A reliable fallback is `multi-qa-MiniLM-L6-cos-v1`. See `eval/` for comparison scripts.
+
+**Note:** The model used at query time in `mcp_server.py` must match the one used to build the FAISS index. If you build with a different model, update `MODEL_NAME` in `mcp_server.py` accordingly.
+
+## Project layout
 
 ```
 fastai-forum-mcp/
-├── .mcp.json              # tells Claude Code how to start the MCP server
-├── forum_crawler.py       # the crawler
-├── build_index.py         # builds the BM25 search index from crawled posts
-├── build_embeddings.py    # builds the FAISS semantic vector index from crawled posts
-├── mcp_server.py          # MCP server — exposes search_forum tool to Claude
-├── upload_to_hub.py       # compresses posts/ and uploads to Hugging Face
-├── pyproject.toml
-├── uv.lock
-└── data/                  # created after running the crawler (gitignored)
-    ├── metadata.json      # index of all known topics
-    ├── search_index.pkl   # BM25 index (built by build_index.py)
-    └── posts/
-        ├── 12345.json     # all posts for topic 12345
-        ├── 12346.json
-        └── ...
+├── mcp_server.py          # MCP server (search_forum tool)
+├── forum_crawler.py       # incremental Discourse crawler
+├── build_index.py         # BM25 index builder
+├── build_embeddings.py    # FAISS semantic index builder
+├── upload_to_hub.py       # publish crawled data to Hugging Face
+├── .mcp.json              # Claude Code MCP config
+├── instructions.md        # suggested agent instructions
+├── CRAWLER.md             # crawler & data format reference
+├── search-index-design.md # index design notes
+└── data/                  # gitignored; created by setup steps
+    ├── metadata.json
+    ├── posts/{topic_id}.json
+    ├── search_index.pkl
+    └── embeddings/
 ```
 
-### `data/metadata.json`
+## Refreshing data
 
-Tracks crawler state and a lightweight summary of every topic. Checkpointed every 25 topics during a run.
+After new posts are crawled, rebuild both indexes and restart the MCP server so it picks up the new files:
 
-```json
-{
-  "last_run": "2024-01-15T10:30:00+00:00",
-  "topics": {
-    "12345": {
-      "title": "How do I train a model?",
-      "created_at": "2022-01-15T10:30:00.000Z",
-      "last_posted_at": "2022-03-01T14:22:00.000Z",
-      "bumped_at": "2022-03-01T14:22:00.000Z",
-      "posts_count": 8,
-      "category_id": 10,
-      "tags": ["fastai", "training"],
-      "slug": "how-do-i-train-a-model"
-    }
-  }
-}
+```bash
+uv run python forum_crawler.py
+uv run python build_index.py
+uv run python build_embeddings.py
+# restart your agent / MCP client
 ```
 
-### `data/posts/{topic_id}.json`
+To publish an updated snapshot for others, see [CRAWLER.md](CRAWLER.md#updating-the-hugging-face-dataset).
 
-One file per topic containing the topic metadata and all its posts.
+## Further reading
 
-```json
-{
-  "topic": {
-    "id": 12345,
-    "title": "How do I train a model?",
-    "created_at": "2022-01-15T10:30:00.000Z",
-    "last_posted_at": "2022-03-01T14:22:00.000Z",
-    "posts_count": 8,
-    "views": 342,
-    "like_count": 12,
-    "category_id": 10,
-    "tags": ["fastai", "training"],
-    "slug": "how-do-i-train-a-model"
-  },
-  "posts": {
-    "98001": {
-      "id": 98001,
-      "post_number": 1,
-      "username": "jsmith",
-      "created_at": "2022-01-15T10:30:00.000Z",
-      "updated_at": "2022-01-15T10:30:00.000Z",
-      "reply_to_post_number": null,
-      "cooked": "<p>How do I train a model?</p>",
-      "raw": "How do I train a model?",
-      "like_count": 2,
-      "reads": 45
-    }
-  }
-}
-```
-
-Posts are stored as a flat dict keyed by post ID. Replies are linked to their parent via `reply_to_post_number`. To look up a parent post:
-
-## Search Index
-
-See [search-index-design.md](search-index-design.md) for design notes, current approach, and a documented alternative approach using SQLite FTS5.
-
-Posts are stored as a flat dict keyed by post ID. Replies are linked to their parent via `reply_to_post_number`. To look up a parent post:
-
-```python
-import json
-
-with open("data/posts/12345.json") as f:
-    topic = json.load(f)
-
-by_number = {p["post_number"]: p for p in topic["posts"].values()}
-
-for post in topic["posts"].values():
-    if post["reply_to_post_number"]:
-        parent = by_number.get(post["reply_to_post_number"])
-```
+- [CRAWLER.md](CRAWLER.md) — Discourse API crawler, on-disk data formats, Hugging Face dataset
+- [search-index-design.md](search-index-design.md) — BM25 ranking, limitations, SQLite FTS5 alternative
+- [instructions.md](instructions.md) — context and prompts for agents using this server
