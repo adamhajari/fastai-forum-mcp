@@ -158,7 +158,7 @@ def main():
     if not args.skip_build:
         import build_embeddings as be
         device = be.select_device()
-        print(f"Loading posts (shared across all variants) …")
+        print("Loading posts (shared across all variants) …")
         posts = be.load_posts()
         for variant in args.variants:
             build_variant(variant, posts, device)

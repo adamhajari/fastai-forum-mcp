@@ -13,3 +13,27 @@ dependencies = [
     "scipy",
     "einops>=0.8.2",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Scripts live at the repo root, so tests import them directly.
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["data", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = [
+    "E501",    # long lines are tolerated in print/help strings
+    "E701",    # compact one-line ifs in the eval scripts' table formatting
+    "B007",    # unused loop variables when unpacking dict items
+    "B905",    # zip() without strict= — the zipped sequences are known-equal length
+]

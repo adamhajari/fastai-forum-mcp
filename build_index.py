@@ -12,7 +12,6 @@ Output:
 """
 
 import json
-import math
 import pickle
 import re
 import sys

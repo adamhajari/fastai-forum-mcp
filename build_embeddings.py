@@ -17,6 +17,8 @@ Usage:
 Output:
     data/embeddings/index.faiss   - FAISS vector index
     data/embeddings/posts.pkl     - post metadata + text (parallel to index)
+    data/embeddings/config.json   - model name/variant/dim used to build the index
+                                    (mcp_server.py reads this to load the same model)
 """
 
 import argparse
@@ -50,6 +52,8 @@ POSTS_DIR = Path(__file__).parent / "data" / "posts"
 EMBEDDINGS_DIR = Path(__file__).parent / "data" / "embeddings"
 FAISS_INDEX_FILE = EMBEDDINGS_DIR / "index.faiss"
 POSTS_META_FILE = EMBEDDINGS_DIR / "posts.pkl"
+CONFIG_FILE = EMBEDDINGS_DIR / "config.json"
+CONFIG_FILENAME = "config.json"
 
 # all-MiniLM-L6-v2: 384-dim embeddings, fast, good quality for semantic search
 MODEL_NAME = "all-MiniLM-L6-v2"
@@ -135,6 +139,7 @@ def build_index(posts: list[dict], device: str, out_dir: Path = None, variant: s
     out_dir.mkdir(parents=True, exist_ok=True)
     faiss_file = out_dir / "index.faiss"
     posts_file = out_dir / "posts.pkl"
+    config_file = out_dir / CONFIG_FILENAME
 
     # Models known to have platform-specific issues on Apple Silicon / MPS:
     #   all-mpnet-base-v2          — hangs at batch 0 unless OMP_NUM_THREADS=1 (already set above)
@@ -204,6 +209,17 @@ def build_index(posts: list[dict], device: str, out_dir: Path = None, variant: s
     print(f"Saving post metadata to {posts_file} …")
     with open(posts_file, "wb") as f:
         pickle.dump(posts, f)
+
+    # Query-time consumers (mcp_server.py, eval scripts) read this to load an
+    # identical model — a mismatch would blow up inside FAISS on every search.
+    print(f"Saving index config to {config_file} …")
+    config = {
+        "model_name": name,
+        "variant": variant,
+        "dim": dim,
+        "max_seq_length": int(model.max_seq_length),
+    }
+    config_file.write_text(json.dumps(config, indent=2) + "\n")
 
     size_mb = (faiss_file.stat().st_size + posts_file.stat().st_size) / 1e6
     print(f"Done. Total size: {size_mb:.0f} MB")

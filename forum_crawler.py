@@ -13,11 +13,11 @@ Usage:
   python forum_crawler.py --stats    # show stats without crawling
 """
 
+import argparse
 import json
+import sys
 import tarfile
 import time
-import sys
-import argparse
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -272,7 +272,7 @@ def run_crawler(no_download: bool = False) -> None:
 
         topic_info, updated_posts = fetch_new_posts_for_topic(topic_id, existing_posts)
         if not topic_info:
-            print(f"  skipped (no data)")
+            print("  skipped (no data)")
             continue
 
         new_count = len(updated_posts) - len(existing_posts)

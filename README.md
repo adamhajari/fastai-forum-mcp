@@ -1,5 +1,7 @@
 # fastai-forum-mcp
 
+[![CI](https://github.com/adamhajari/fastai-forum-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/adamhajari/fastai-forum-mcp/actions/workflows/ci.yml)
+
 An [MCP](https://modelcontextprotocol.io/) server that gives coding agents RAG-style access to the [fast.ai forum](https://forums.fast.ai/). It searches ~200k community posts with hybrid keyword + semantic retrieval, so agents can answer course questions using up-to-date community knowledge instead of only the 2022 course materials.
 
 ## Quick start
@@ -43,8 +45,6 @@ The MCP exposes a single tool, `search_forum(query, n_results=20, mode="hybrid")
 
 If the semantic index has not been built, `semantic` and `hybrid` fall back to `bm25`.
 
-For agent behavior tips (when to search, how many queries to run), see [instructions.md](instructions.md).
-
 ## How it works
 
 ```
@@ -70,7 +70,11 @@ uv run python build_embeddings.py --model nomic-ai/nomic-embed-text-v1 --max-seq
 
 A reliable fallback is `multi-qa-MiniLM-L6-cos-v1`. See `eval/` for comparison scripts.
 
-**Note:** The model used at query time in `mcp_server.py` must match the one used to build the FAISS index. If you build with a different model, update `MODEL_NAME` in `mcp_server.py` accordingly.
+`build_embeddings.py` writes `data/embeddings/config.json` (model name, variant, embedding
+dimension, max sequence length) alongside the index, and `mcp_server.py` reads it to load the
+same model at query time — no manual edits needed when you switch models. If that config is
+missing (an index built before this was added) or disagrees with the index dimension, the
+server exits at startup with a message telling you to rebuild.
 
 ## Project layout
 
@@ -81,8 +85,9 @@ fastai-forum-mcp/
 ├── build_index.py         # BM25 index builder
 ├── build_embeddings.py    # FAISS semantic index builder
 ├── upload_to_hub.py       # publish crawled data to Hugging Face
+├── tests/                 # pytest suite (no corpus or network needed)
+├── .github/workflows/     # CI: ruff + pytest on Python 3.10 and 3.12
 ├── .mcp.json              # Claude Code MCP config
-├── instructions.md        # suggested agent instructions
 ├── CRAWLER.md             # crawler & data format reference
 ├── search-index-design.md # index design notes
 └── data/                  # gitignored; created by setup steps
@@ -105,8 +110,19 @@ uv run python build_embeddings.py
 
 To publish an updated snapshot for others, see [CRAWLER.md](CRAWLER.md#updating-the-hugging-face-dataset).
 
+## Development
+
+```bash
+uv sync            # installs dev deps (pytest, ruff) too
+uv run pytest
+uv run ruff check .
+```
+
+The test suite covers the scoring, RRF fusion, HTML-stripping, tokenizing and
+crawler-retry logic. It runs entirely on fixtures — no `data/` corpus, no
+network access, no API keys — so it's fast locally and in CI.
+
 ## Further reading
 
 - [CRAWLER.md](CRAWLER.md) — Discourse API crawler, on-disk data formats, Hugging Face dataset
 - [search-index-design.md](search-index-design.md) — BM25 ranking, limitations, SQLite FTS5 alternative
-- [instructions.md](instructions.md) — context and prompts for agents using this server

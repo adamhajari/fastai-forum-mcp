@@ -13,6 +13,7 @@ Usage (Claude Code starts this automatically via .mcp.json):
     python mcp_server.py
 """
 
+import json
 import math
 import pickle
 import re
@@ -29,51 +30,107 @@ DATA_DIR = Path(__file__).parent / "data"
 BM25_INDEX_FILE = DATA_DIR / "search_index.pkl"
 FAISS_INDEX_FILE = DATA_DIR / "embeddings" / "index.faiss"
 FAISS_POSTS_FILE = DATA_DIR / "embeddings" / "posts.pkl"
+FAISS_CONFIG_FILE = DATA_DIR / "embeddings" / "config.json"
 BASE_URL = "https://forums.fast.ai"
 
 # ---------------------------------------------------------------------------
-# Load BM25 index
+# Index state — populated by load_indexes() at startup, not at import time, so
+# that this module can be imported (e.g. by tests) without the corpus present.
 # ---------------------------------------------------------------------------
 
-if not BM25_INDEX_FILE.exists():
-    print(f"BM25 index not found at {BM25_INDEX_FILE}. Run build_index.py first.")
-    sys.exit(1)
-
-print(f"Loading BM25 index …", flush=True)
-with open(BM25_INDEX_FILE, "rb") as f:
-    _bm25_data = pickle.load(f)
-bm25 = _bm25_data["bm25"]
-bm25_posts = _bm25_data["posts"]
-print(f"BM25: {len(bm25_posts):,} posts loaded.", flush=True)
-
-# ---------------------------------------------------------------------------
-# Load semantic (FAISS) index — optional, graceful fallback if not built yet
-# ---------------------------------------------------------------------------
-
+bm25 = None
+bm25_posts = None
 faiss_index = None
 faiss_posts = None
+_embed_model = None
 
-if FAISS_INDEX_FILE.exists() and FAISS_POSTS_FILE.exists():
+
+def _load_bm25_index() -> None:
+    global bm25, bm25_posts
+
+    if not BM25_INDEX_FILE.exists():
+        print(f"BM25 index not found at {BM25_INDEX_FILE}. Run build_index.py first.")
+        sys.exit(1)
+
+    print("Loading BM25 index …", flush=True)
+    with open(BM25_INDEX_FILE, "rb") as f:
+        data = pickle.load(f)
+    bm25 = data["bm25"]
+    bm25_posts = data["posts"]
+    print(f"BM25: {len(bm25_posts):,} posts loaded.", flush=True)
+
+
+def _load_semantic_index() -> None:
+    """Load the FAISS index — optional, graceful fallback if not built yet."""
+    global faiss_index, faiss_posts, _embed_model
+
+    if not (FAISS_INDEX_FILE.exists() and FAISS_POSTS_FILE.exists()):
+        print("Semantic index not found — run build_embeddings.py to enable semantic/hybrid search.", flush=True)
+        return
+
     try:
         import faiss
-        import numpy as np
-        from sentence_transformers import SentenceTransformer
         import torch
+        from sentence_transformers import SentenceTransformer
 
         print("Loading FAISS index …", flush=True)
         faiss_index = faiss.read_index(str(FAISS_INDEX_FILE))
         with open(FAISS_POSTS_FILE, "rb") as f:
             faiss_posts = pickle.load(f)
 
+        # The query-time model must be the one the index was built with; the
+        # builder records it in config.json next to the index.
+        if not FAISS_CONFIG_FILE.exists():
+            print(
+                f"ERROR: {FAISS_CONFIG_FILE} not found. This index was built by an older "
+                "version of build_embeddings.py, so the embedding model it used is unknown.\n"
+                "Rebuild it: uv run python build_embeddings.py [--model MODEL]",
+                flush=True,
+            )
+            sys.exit(1)
+
+        cfg = json.loads(FAISS_CONFIG_FILE.read_text())
+        model_name = cfg["model_name"]
+        if cfg["dim"] != faiss_index.d:
+            print(
+                f"ERROR: index config mismatch — {FAISS_CONFIG_FILE} says dim={cfg['dim']} "
+                f"(model '{model_name}') but {FAISS_INDEX_FILE} has dim={faiss_index.d}.\n"
+                "The config and the index are out of sync. Rebuild: "
+                "uv run python build_embeddings.py [--model MODEL]",
+                flush=True,
+            )
+            sys.exit(1)
+
         device = "mps" if torch.backends.mps.is_available() else "cpu"
-        print(f"Loading embedding model (device={device}) …", flush=True)
-        _embed_model = SentenceTransformer("all-MiniLM-L6-v2", device=device)
+        print(f"Loading embedding model '{model_name}' (device={device}) …", flush=True)
+        _embed_model = SentenceTransformer(model_name, device=device, trust_remote_code=True)
+        if cfg.get("max_seq_length"):
+            _embed_model.max_seq_length = cfg["max_seq_length"]
+
+        loaded_dim = _embed_model.get_sentence_embedding_dimension()
+        if loaded_dim != faiss_index.d:
+            print(
+                f"ERROR: model '{model_name}' produces {loaded_dim}-dim embeddings but the "
+                f"FAISS index is {faiss_index.d}-dim. Every semantic query would fail.\n"
+                "Rebuild the index: uv run python build_embeddings.py --model "
+                f"{model_name}",
+                flush=True,
+            )
+            sys.exit(1)
+
         print(f"Semantic search: {faiss_index.ntotal:,} vectors loaded.", flush=True)
+    except SystemExit:
+        raise
     except Exception as e:
         print(f"Semantic index unavailable: {e}", flush=True)
         faiss_index = None
-else:
-    print("Semantic index not found — run build_embeddings.py to enable semantic/hybrid search.", flush=True)
+
+
+def load_indexes() -> None:
+    """Load both indexes into module-level state. Called once at startup."""
+    _load_bm25_index()
+    _load_semantic_index()
+
 
 # ---------------------------------------------------------------------------
 # Scoring helpers (shared)
@@ -233,5 +290,10 @@ def search_forum(query: str, n_results: int = 20, mode: str = "hybrid") -> str:
     return _format_results(results, query)
 
 
-if __name__ == "__main__":
+def main() -> None:
+    load_indexes()
     mcp.run()
+
+
+if __name__ == "__main__":
+    main()

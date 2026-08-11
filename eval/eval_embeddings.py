@@ -85,7 +85,6 @@ def evaluate(queries, index, post_id_to_pos, model, max_k=20):
 
     query_texts = [q["query"] for q in queries]
     print(f"Embedding {len(query_texts)} queries …")
-    import numpy as np
     embeddings = model.encode(
         query_texts,
         batch_size=64,
