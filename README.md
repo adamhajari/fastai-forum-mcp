@@ -4,7 +4,7 @@
 
 An [MCP](https://modelcontextprotocol.io/) server that gives coding agents RAG-style access to the [fast.ai forum](https://forums.fast.ai/). It searches ~200k community posts with hybrid keyword + semantic retrieval, so agents can answer course questions using up-to-date community knowledge instead of only the 2022 course materials.
 
-## Quick start
+## Quick start 
 
 ```bash
 git clone https://github.com/adamhajari/fastai-forum-mcp
