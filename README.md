@@ -122,7 +122,7 @@ The test suite covers the scoring, RRF fusion, HTML-stripping, tokenizing and
 crawler-retry logic. It runs entirely on fixtures — no `data/` corpus, no
 network access, no API keys — so it's fast locally and in CI.
 
-## Further reading
+## Further reading 
 
 - [CRAWLER.md](CRAWLER.md) — Discourse API crawler, on-disk data formats, Hugging Face dataset
 - [search-index-design.md](search-index-design.md) — BM25 ranking, limitations, SQLite FTS5 alternative
